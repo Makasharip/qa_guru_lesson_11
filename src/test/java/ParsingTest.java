@@ -3,8 +3,8 @@ import com.codeborne.xlstest.XLS;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.CSVReader;
 import model.Country;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class ParsingTest {
     ClassLoader cl = ParsingTest.class.getClassLoader();
@@ -24,8 +23,8 @@ public class ParsingTest {
 
 
     @Test
-    public void zipTest() throws Exception {
-        try (InputStream stream = cl.getResourceAsStream("counties.zip");
+    void zipTest() throws Exception {
+        try (InputStream stream = cl.getResourceAsStream("Countries.zip");
              ZipInputStream zis = new ZipInputStream(stream)) {
 
             ZipEntry entry;
@@ -37,27 +36,55 @@ public class ParsingTest {
 
                     CSVReader csvReader = new CSVReader(new InputStreamReader(zis));
                     List<String[]> content = csvReader.readAll();
-                    Assertions.assertEquals(4, content.size());
+                    //Assertions.assertEquals(4, content.size());
+                    assertThat(4).isEqualTo(content.size());
 
                     final String[] firstRow = content.get(1);
-                    Assertions.assertArrayEquals(new String[]{"Russia", "China"}, firstRow);
+                    //Assertions.assertArrayEquals(new String[]{"Russia", "China"}, firstRow);
+                    assertThat(new String[]{"Russia", "China"}).isEqualTo(firstRow);
                     System.out.println("CSV File");
-                }
 
-                if (entry.getName().contains("Countries_Neighbour.pdf")){
+                }
+            }
+        }
+    }
+    @Test
+    void pdfTest() throws Exception {
+        try (InputStream stream = cl.getResourceAsStream("Countries.zip");
+             ZipInputStream zis = new ZipInputStream(stream)) {
+
+            ZipEntry entry;
+            String name;
+            while ((entry = zis.getNextEntry()) != null) {
+                name = entry.getName();
+                System.out.printf("File name: %s \n", name);
+                if (entry.getName().contains("Countries_Neighbour.pdf")) {
                     PDF pdf = new PDF(zis);
 
-                    Assertions.assertTrue(pdf.text.contains("counties' neighbour"));
+                    assertThat(pdf.text).contains("counties' neighbour");
 
                     System.out.println("PDF File");
                 }
+            }
+        }
+    }
+    @Test
+    void xlsxTest() throws Exception {
+        try (InputStream stream = cl.getResourceAsStream("Countries.zip");
+             ZipInputStream zis = new ZipInputStream(stream)) {
+
+            ZipEntry entry;
+            String name;
+            while ((entry = zis.getNextEntry()) != null) {
+                name = entry.getName();
+                System.out.printf("File name: %s \n", name);
                 if (entry.getName().contains("Countries_Neighbour.xlsx")){
                     XLS xls = new XLS(zis);
-                    Assertions.assertEquals("China",
-                            xls.excel.getSheetAt(0)
-                                    .getRow(1)
-                                    .getCell(1)
-                                    .getStringCellValue());
+
+                    assertThat("China").isEqualTo(xls.excel.getSheetAt(0)
+                            .getRow(1)
+                            .getCell(1)
+                            .getStringCellValue());
                     System.out.println("XLS File");
                 }
             }
@@ -75,7 +102,7 @@ public class ParsingTest {
             assertThat(country.getName()).isNotNull();
             int currentYear = Year.now().getValue();
             assertThat(country.getAge()).isBetween(1980, currentYear);
-            assertEquals(country.getNotes().get(2), "balalayka");
+            assertThat(country.getNotes().get(2)).isEqualTo("balalayka");
             System.out.println("Successful check json file.");
         }
     }

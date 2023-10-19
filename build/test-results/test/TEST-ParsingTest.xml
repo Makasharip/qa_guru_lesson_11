@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ParsingTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2023-10-19T17:46:28" hostname="DESKTOP-A7N1MB5" time="0.528">
+  <properties/>
+  <testcase name="verifyJsonContentTest()" classname="ParsingTest" time="0.091"/>
+  <testcase name="xlsxTest()" classname="ParsingTest" time="0.307"/>
+  <testcase name="pdfTest()" classname="ParsingTest" time="0.113"/>
+  <testcase name="zipTest()" classname="ParsingTest" time="0.015"/>
+  <system-out><![CDATA[Successful check json file.
+File name: Countries_Neighbour.csv 
+File name: Countries_Neighbour.pdf 
+File name: Countries_Neighbour.xlsx 
+XLS File
+File name: Countries_Neighbour.csv 
+File name: Countries_Neighbour.pdf 
+PDF File
+File name: Countries_Neighbour.xlsx 
+File name: Countries_Neighbour.csv 
+CSV File
+File name: Countries_Neighbour.pdf 
+File name: Countries_Neighbour.xlsx 
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
